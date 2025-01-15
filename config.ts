@@ -6,6 +6,8 @@ const config = {
       urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT!,
       privateKey: process.env.PRIVATE_KEY!,
     },
+    databaseUrl: process.env.DATABASE_URL!,
+    authSecret: process.env.AUTH_SECRET!,
   },
 };
 
