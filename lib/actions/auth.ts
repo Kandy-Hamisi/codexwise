@@ -56,7 +56,7 @@ export const signUp = async (params: AuthCredentials) => {
     .where(eq(users.email, email))
     .limit(1);
 
-  if (!existingUser) {
+  if (existingUser.length > 0) {
     return { success: false, error: "User already exist" };
   }
 
@@ -79,7 +79,7 @@ export const signUp = async (params: AuthCredentials) => {
       },
     });
 
-    // await signInWithCredentials({ email, password });
+    await signInWithCredentials({ email, password });
 
     return { success: true };
   } catch (error) {
