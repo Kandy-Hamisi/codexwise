@@ -29,13 +29,15 @@ export const signInWithCredentials = async (
     });
 
     if (result?.error) {
-      return { success: false, error: result?.error };
+      throw new Error(result.error);
+      // return { success: false, error: result?.error };
     }
 
     return { success: true };
   } catch (error) {
     console.log(error, "Sign In error");
-    return { success: false, error: "Sign In error" };
+    throw new Error("Sign In error");
+    // return { success: false, error: "Sign In error" };
   }
 };
 
