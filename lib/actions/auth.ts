@@ -11,6 +11,12 @@ import { redirect } from "next/navigation";
 import { workflowClient } from "@/lib/workflow";
 import config from "@/config";
 
+type AuthResult = {
+  success: boolean;
+  error?: string;
+  redirect?: string;
+};
+
 export const signInWithCredentials = async (
   params: Pick<AuthCredentials, "email" | "password">,
 ) => {
@@ -19,7 +25,9 @@ export const signInWithCredentials = async (
   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
   const { success } = await ratelimit.limit(ip);
 
-  if (!success) return redirect("/too-fast");
+  if (!success) {
+    return { success: false, redirect: "/too-fast" };
+  }
 
   try {
     const result = await signIn("credentials", {
@@ -29,26 +37,28 @@ export const signInWithCredentials = async (
     });
 
     if (result?.error) {
-      throw new Error(result.error);
-      // return { success: false, error: result?.error };
+      // throw new Error(result.error);
+      return { success: false, error: result?.error };
     }
 
     return { success: true };
   } catch (error) {
     console.log(error, "Sign In error");
-    throw new Error("Sign In error");
-    // return { success: false, error: "Sign In error" };
+    // throw new Error("Sign In error");
+    return { success: false, error: "Sign In error" };
   }
 };
 
-export const signUp = async (params: AuthCredentials) => {
+export const signUp = async (params: AuthCredentials): Promise<AuthResult> => {
   //     sign up functionality
   const { fullName, email, universityId, password, universityCard } = params;
 
   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
   const { success } = await ratelimit.limit(ip);
 
-  if (!success) return redirect("/too-fast");
+  if (!success) {
+    return { success: false, redirect: "/too-fast" };
+  }
 
   // check if the user already exists.
 
