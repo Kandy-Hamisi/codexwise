@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
-import ImageUpload from "@/components/ImageUpload";
+import FileUpload from "@/components/FileUpload";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { bookSchema } from "@/lib/validations";
@@ -135,6 +135,7 @@ const BookForm = ({ type, ...book }: Props) => {
                   required
                   type="number"
                   min={1}
+                  max={5}
                   placeholder="Book Rating"
                   className="book-form_input"
                   {...field}
@@ -150,13 +151,14 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-base font-normal text-dark-500">
-                Available Copies
+                Total Copies
               </FormLabel>
               <FormControl>
                 <Input
                   required
                   type="number"
                   min={1}
+                  max={1000}
                   placeholder="Available Copies"
                   className="book-form_input"
                   {...field}
@@ -250,6 +252,30 @@ const BookForm = ({ type, ...book }: Props) => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name={"summary"}
+          render={({ field }) => (
+            <FormItem className="flex flex-col gap-1">
+              <FormLabel className="text-base font-normal text-dark-500">
+                Book Summary
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Book summary"
+                  {...field}
+                  rows={5}
+                  className="book-form_input"
+                />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="book-form_btn text-white">
+          Add Book to Library
+        </Button>
         {/*<Button type="submit" className="form-btn">*/}
         {/*  {isSignIn ? "Sign In" : "Sign Up"}*/}
         {/*</Button>*/}
